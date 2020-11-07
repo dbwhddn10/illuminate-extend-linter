@@ -1,12 +1,10 @@
 {
     "name": "dbwhddn10/illuminate-extend-linter",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "authors": [
         {
             "name": "dbwhddn10",
             "email": "dbwhddn10@gmail.com"
         }
-    ],
-    "require": {
-    }
+    ]
 }

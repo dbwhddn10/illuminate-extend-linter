@@ -38,14 +38,18 @@ foreach ( $classes['service'] as $class )
 
         foreach ( $array as $key => $value )
         {
-            $resolver     = array_pop($value);
-            $resolverCode = ' => [';
-            sort($value);
-            foreach ( $value as $dep )
+            if ( is_object($value) && $value instanceof Closure )
             {
-                $resolverCode.='\''.$dep.'\', ';
+                $resolver = $value;
+                $params   = (new \ReflectionFunction($resolver))->getParameters();
+                $value    = array_keys($params);
             }
-
+            else
+            {
+                $resolver = array_pop($value);
+            }
+            $resolverCode = ' => ';
+            sort($value);
             $resolverCode .= 'function (';
             foreach ( $value as $i => $dep )
             {
@@ -75,7 +79,7 @@ foreach ( $classes['service'] as $class )
             }
 
             $resolverCode .= ') {'.PHP_EOL.PHP_EOL;
-            $resolverCode .= getResolverCode($resolver).str_repeat('    ', 3).'}],'.PHP_EOL;
+            $resolverCode .= getResolverCode($resolver).str_repeat('    ', 3).'},'.PHP_EOL;
 
             $array[$key] = $resolverCode;
         }
